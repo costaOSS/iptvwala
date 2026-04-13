@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IPTVwala</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_channels">Channels</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_epg">EPG</string>
+    <string name="nav_plainapp">PlainApp</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Common -->
+    <string name="search">Search</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="refresh">Refresh</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+
+    <!-- Channels -->
+    <string name="all_channels">All Channels</string>
+    <string name="live">Live</string>
+    <string name="vod">VOD</string>
+    <string name="series">Series</string>
+    <string name="recently_watched">Recently Watched</string>
+    <string name="no_channels">No channels found</string>
+    <string name="channel_added_to_favorites">Added to favorites</string>
+    <string name="channel_removed_from_favorites">Removed from favorites</string>
+
+    <!-- Sources -->
+    <string name="sources">Sources</string>
+    <string name="add_source">Add Source</string>
+    <string name="edit_source">Edit Source</string>
+    <string name="source_url">URL</string>
+    <string name="source_name">Name</string>
+    <string name="source_type">Type</string>
+    <string name="source_type_m3u">M3U Playlist</string>
+    <string name="source_type_xtream">Xtream Codes</string>
+    <string name="source_host">Host</string>
+    <string name="source_username">Username</string>
+    <string name="source_password">Password</string>
+    <string name="source_last_refresh">Last refresh: %s</string>
+    <string name="source_channel_count">%d channels</string>
+    <string name="source_error">Error: %s</string>
+    <string name="source_refreshing">Refreshing…</string>
+
+    <!-- EPG -->
+    <string name="epg">EPG</string>
+    <string name="epg_now">Now</string>
+    <string name="epg_next">Next</string>
+    <string name="epg_no_program">No program info</string>
+    <string name="epg_add_url">Add EPG URL</string>
+
+    <!-- Player -->
+    <string name="buffering">Buffering…</string>
+    <string name="playback_error">Playback error</string>
+    <string name="try_next_stream">Try next stream</string>
+    <string name="playback_speed">Speed</string>
+    <string name="audio_track">Audio Track</string>
+    <string name="subtitles">Subtitles</string>
+    <string name="pip_mode">Picture in Picture</string>
+    <string name="background_playback">Background playback</string>
+
+    <!-- PlainApp -->
+    <string name="plainapp">PlainApp</string>
+    <string name="plainapp_remote">Remote Control</string>
+    <string name="plainapp_clipboard">Clipboard</string>
+    <string name="plainapp_sources">Source Manager</string>
+    <string name="plainapp_browser">Channel Browser</string>
+    <string name="plainapp_files">File Manager</string>
+    <string name="plainapp_apps">App Launcher</string>
+    <string name="plainapp_notifications">Notifications</string>
+    <string name="plainapp_device">Device Info</string>
+    <string name="plainapp_volume">Volume &amp; Display</string>
+
+    <string name="plainapp_remote_dpad">D-Pad Control</string>
+    <string name="plainapp_remote_home">HOME</string>
+    <string name="plainapp_remote_back">BACK</string>
+    <string name="plainapp_remote_menu">MENU</string>
+    <string name="plainapp_remote_play">PLAY</string>
+
+    <string name="plainapp_clipboard_history">Clipboard History</string>
+    <string name="plainapp_clipboard_paste">Paste Now</string>
+    <string name="plainapp_clipboard_clear">Clear All</string>
+    <string name="plainapp_clipboard_empty">Clipboard is empty</string>
+
+    <string name="plainapp_files_empty">No files found</string>
+    <string name="plainapp_files_storage">Storage: %1$s / %2$s</string>
+
+    <string name="plainapp_apps_search">Search apps…</string>
+    <string name="plainapp_apps_empty">No apps found</string>
+
+    <string name="plainapp_notifications_empty">No notifications</string>
+    <string name="plainapp_notifications_clear">Clear All</string>
+    <string name="plainapp_notifications_permission">Grant Notification Access</string>
+
+    <string name="plainapp_device_name">Device: %s</string>
+    <string name="plainapp_device_ip">IP: %s</string>
+    <string name="plainapp_device_version">Version: %s</string>
+    <string name="plainapp_device_uptime">Uptime: %s</string>
+    <string name="plainapp_device_scan_qr">Scan QR to access</string>
+
+    <string name="plainapp_volume_media">Media Volume</string>
+    <string name="plainapp_volume_brightness">Brightness</string>
+    <string name="plainapp_volume_wake">Wake Screen</string>
+    <string name="plainapp_volume_keep_on">Keep Screen On</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="settings_sources">Sources</string>
+    <string name="settings_epg">EPG</string>
+    <string name="settings_plainapp_server">PlainApp Server</string>
+    <string name="settings_player">Player</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_cache">Cache &amp; Storage</string>
+    <string name="settings_about">About</string>
+
+    <string name="settings_server_enabled">Server Enabled</string>
+    <string name="settings_server_port">Port</string>
+    <string name="settings_server_pin">PIN Protection</string>
+    <string name="settings_server_device_name">Device Name</string>
+    <string name="settings_server_qr">Show QR Code</string>
+    <string name="settings_server_log">Server Log</string>
+
+    <string name="settings_video_quality">Preferred Quality</string>
+    <string name="settings_video_quality_auto">Auto</string>
+    <string name="settings_buffer_size">Buffer Size</string>
+    <string name="settings_decoder">Hardware Decoder</string>
+    <string name="settings_decoder_auto">Auto</string>
+    <string name="settings_decoder_sw">Force Software</string>
+    <string name="settings_decoder_hw">Force Hardware</string>
+    <string name="settings_background_playback">Background Playback</string>
+    <string name="settings_auto_retry">Auto-retry on Error</string>
+
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_accent_color">Accent Color</string>
+    <string name="settings_channel_layout">Channel Layout</string>
+    <string name="settings_channel_layout_grid">Grid</string>
+    <string name="settings_channel_layout_list">List</string>
+    <string name="settings_show_numbers">Show Channel Numbers</string>
+
+    <string name="settings_clear_epg">Clear EPG Cache</string>
+    <string name="settings_clear_images">Clear Image Cache</string>
+    <string name="settings_clear_history">Clear Watch History</string>
+    <string name="settings_downloads_folder">Downloads Folder</string>
+
+    <string name="settings_version">Version %s</string>
+    <string name="settings_licenses">Open Source Licenses</string>
+    <string name="settings_changelog">Changelog</string>
+
+    <!-- Permissions -->
+    <string name="permission_storage">Storage permission is required to load local files</string>
+    <string name="permission_notification">Notification permission is required</string>
+    <string name="permission_accessibility">Accessibility service is required for remote control</string>
+    <string name="permission_notification_listener">Grant notification access in Settings</string>
+
+    <!-- Notifications -->
+    <string name="notification_player_title">IPTVwala Player</string>
+    <string name="notification_player_text">Playing: %s</string>
+    <string name="notification_server_title">PlainApp Server</string>
+    <string name="notification_server_text">Running on port %d</string>
+
+    <!-- Accessibility -->
+    <string name="accessibility_service_description">IPTVwala Remote Control Service - enables remote D-pad key injection</string>
+    <string name="notification_listener_label">IPTVwala Notifications</string>
+
+    <!-- Shortcuts -->
+    <string name="shortcut_channels">Channels</string>
+    <string name="shortcut_channels_long">Browse all channels</string>
+    <string name="shortcut_favorites">Favorites</string>
+    <string name="shortcut_favorites_long">View favorite channels</string>
+    <string name="shortcut_plainapp">PlainApp</string>
+    <string name="shortcut_plainapp_long">Open PlainApp control panel</string>
+
+    <!-- Errors -->
+    <string name="error_network">Network error. Check your connection.</string>
+    <string name="error_parse">Failed to parse playlist</string>
+    <string name="error_source_empty">No channels in this source</string>
+    <string name="error_no_player">No video player available</string>
+</resources>

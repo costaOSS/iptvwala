@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPTVwala PlainApp</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #121212; color: #fff; min-height: 100vh; }
+        .container { display: flex; height: 100vh; }
+        .sidebar { width: 250px; background: #1e1e1e; padding: 20px; overflow-y: auto; }
+        .sidebar h1 { font-size: 1.5rem; margin-bottom: 20px; color: #bb86fc; }
+        .nav-item { padding: 12px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 4px; transition: background 0.2s; }
+        .nav-item:hover, .nav-item.active { background: #bb86fc; color: #000; }
+        .main { flex: 1; padding: 24px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .header h2 { font-size: 1.8rem; }
+        .status { display: flex; align-items: center; gap: 8px; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #4caf50; }
+        .status-dot.offline { background: #f44336; }
+        .card { background: #1e1e1e; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .card h3 { margin-bottom: 16px; color: #bb86fc; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-primary { background: #bb86fc; color: #000; }
+        .btn-danger { background: #f44336; color: #fff; }
+        .btn-secondary { background: #333; color: #fff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        .channel-card { background: #2a2a2a; border-radius: 8px; padding: 16px; cursor: pointer; transition: transform 0.2s; }
+        .channel-card:hover { transform: scale(1.02); }
+        .channel-card img { width: 100%; aspect-ratio: 1; object-fit: contain; margin-bottom: 8px; }
+        .channel-card h4 { font-size: 0.9rem; text-align: center; margin-bottom: 8px; }
+        .input { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 12px; }
+        .input:focus { outline: none; border-color: #bb86fc; }
+        .dpad { display: grid; grid-template-areas: ". up ." "left center right" ". down ." ". center-btn ."; gap: 8px; max-width: 200px; margin: 0 auto; }
+        .dpad-btn { width: 60px; height: 60px; border-radius: 50%; background: #333; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .dpad-btn:active { background: #bb86fc; color: #000; }
+        .dpad-btn.up { grid-area: up; }
+        .dpad-btn.down { grid-area: down; }
+        .dpad-btn.left { grid-area: left; }
+        .dpad-btn.right { grid-area: right; }
+        .dpad-btn.center { grid-area: center; background: #bb86fc; color: #000; }
+        .dpad-btn.center-btn { grid-area: center-btn; background: #333; width: 80px; height: 40px; border-radius: 8px; }
+        .shortcuts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+        .shortcut { padding: 12px 16px; background: #333; border-radius: 8px; cursor: pointer; text-align: center; min-width: 80px; }
+        .shortcut:hover { background: #444; }
+        .volume-slider { width: 100%; margin: 16px 0; }
+        .source-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #2a2a2a; border-radius: 8px; margin-bottom: 8px; }
+        .source-item .actions { display: flex; gap: 8px; }
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #333; padding: 12px 24px; border-radius: 8px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .file-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #2a2a2a; border-radius: 8px; margin-bottom: 8px; }
+        .file-item .name { flex: 1; }
+        .file-item .size { color: #888; font-size: 0.8rem; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+        .tab { padding: 8px 16px; background: #333; border-radius: 8px; cursor: pointer; }
+        .tab.active { background: #bb86fc; color: #000; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>IPTVwala</h1>
+            <div class="nav-item active" data-tab="channels">Channels</div>
+            <div class="nav-item" data-tab="sources">Sources</div>
+            <div class="nav-item" data-tab="remote">Remote</div>
+            <div class="nav-item" data-tab="clipboard">Clipboard</div>
+            <div class="nav-item" data-tab="files">Files</div>
+            <div class="nav-item" data-tab="apps">Apps</div>
+            <div class="nav-item" data-tab="notifications">Notifications</div>
+            <div class="nav-item" data-tab="device">Device</div>
+            <div class="nav-item" data-tab="volume">Volume</div>
+        </div>
+        <div class="main">
+            <div class="header">
+                <h2 id="page-title">Channels</h2>
+                <div class="status">
+                    <div class="status-dot" id="status-dot"></div>
+                    <span id="status-text">Connecting...</span>
+                </div>
+            </div>
+            <div id="content"></div>
+        </div>
+    </div>
+    <div id="toast" class="toast" style="display: none;"></div>
+
+    <script>
+        const API = window.location.origin;
+        let ws = null;
+        let currentTab = 'channels';
+
+        async function api(endpoint, options = {}) {
+            try {
+                const res = await fetch(API + endpoint, options);
+                return await res.json();
+            } catch (e) {
+                console.error(e);
+                return null;
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        function connectWs() {
+            ws = new WebSocket('ws://' + window.location.host + '/ws');
+            ws.onopen = () => {
+                document.getElementById('status-dot').classList.remove('offline');
+                document.getElementById('status-text').textContent = 'Connected';
+            };
+            ws.onclose = () => {
+                document.getElementById('status-dot').classList.add('offline');
+                document.getElementById('status-text').textContent = 'Disconnected';
+                setTimeout(connectWs, 3000);
+            };
+            ws.onmessage = (e) => {
+                const [type, ...args] = e.data.split(':');
+                if (type === 'clipboard') showToast('Clipboard: ' + args.join(':'));
+            };
+        }
+
+        async function loadChannels() {
+            const channels = await api('/api/channels') || [];
+            document.getElementById('content').innerHTML = `
+                <input type="text" class="input" placeholder="Search channels..." id="search-input">
+                <div class="grid">${channels.map(ch => `
+                    <div class="channel-card" onclick="playChannel(${ch.id})">
+                        ${ch.logo ? `<img src="${ch.logo}" alt="${ch.name}">` : '<div style="height:80px;display:flex;align-items:center;justify-content:center;">📺</div>'}
+                        <h4>${ch.name}</h4>
+                    </div>
+                `).join('')}</div>
+            `;
+            document.getElementById('search-input').addEventListener('input', async (e) => {
+                const q = e.target.value;
+                if (q) {
+                    const results = await api('/api/channels/search?q=' + encodeURIComponent(q)) || [];
+                    renderChannels(results);
+                } else {
+                    loadChannels();
+                }
+            });
+        }
+
+        function renderChannels(channels) {
+            document.querySelector('.grid').innerHTML = channels.map(ch => `
+                <div class="channel-card" onclick="playChannel(${ch.id})">
+                    ${ch.logo ? `<img src="${ch.logo}" alt="${ch.name}">` : '<div style="height:80px;display:flex;align-items:center;justify-content:center;">📺</div>'}
+                    <h4>${ch.name}</h4>
+                </div>
+            `).join('');
+        }
+
+        async function playChannel(id) {
+            await api('/api/play', { method: 'POST', body: new URLSearchParams({ id }) });
+            showToast('Playing channel');
+        }
+
+        async function loadSources() {
+            const sources = await api('/api/sources') || [];
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>Add Source</h3>
+                    <input type="text" class="input" placeholder="Name" id="source-name">
+                    <input type="text" class="input" placeholder="URL" id="source-url">
+                    <select class="input" id="source-type">
+                        <option value="M3U">M3U Playlist</option>
+                        <option value="XTREAM">Xtream Codes</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="addSource()">Add Source</button>
+                </div>
+                <div class="card">
+                    <h3>Sources (${sources.length})</h3>
+                    ${sources.map(s => `
+                        <div class="source-item">
+                            <div>
+                                <strong>${s.name}</strong><br>
+                                <small>${s.channelCount} channels</small>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-secondary" onclick="refreshSource(${s.id})">Refresh</button>
+                                <button class="btn btn-danger" onclick="deleteSource(${s.id})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        async function addSource() {
+            const name = document.getElementById('source-name').value;
+            const url = document.getElementById('source-url').value;
+            const type = document.getElementById('source-type').value;
+            await api('/api/sources/add', {
+                method: 'POST',
+                body: new URLSearchParams({ name, url, type })
+            });
+            showToast('Source added');
+            loadSources();
+        }
+
+        async function refreshSource(id) {
+            await api('/api/sources/' + id + '/refresh', { method: 'POST' });
+            showToast('Refreshing...');
+        }
+
+        async function deleteSource(id) {
+            await api('/api/sources/' + id, { method: 'DELETE' });
+            showToast('Source deleted');
+            loadSources();
+        }
+
+        function loadRemote() {
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>D-Pad Control</h3>
+                    <div class="dpad">
+                        <button class="dpad-btn up" onclick="sendKey('UP')">▲</button>
+                        <button class="dpad-btn left" onclick="sendKey('LEFT')">◀</button>
+                        <button class="dpad-btn center" onclick="sendKey('OK')">●</button>
+                        <button class="dpad-btn right" onclick="sendKey('RIGHT')">▶</button>
+                        <button class="dpad-btn down" onclick="sendKey('DOWN')">▼</button>
+                    </div>
+                    <div class="shortcuts">
+                        <div class="shortcut" onclick="sendKey('HOME')">HOME</div>
+                        <div class="shortcut" onclick="sendKey('BACK')">BACK</div>
+                        <div class="shortcut" onclick="sendKey('MENU')">MENU</div>
+                        <div class="shortcut" onclick="sendKey('SEARCH')">SEARCH</div>
+                        <div class="shortcut" onclick="sendKey('PLAY')">PLAY</div>
+                        <div class="shortcut" onclick="sendKey('PAUSE')">PAUSE</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Text Input</h3>
+                    <input type="text" class="input" id="text-input" placeholder="Enter text...">
+                    <button class="btn btn-primary" onclick="sendText()">Send to TV</button>
+                </div>
+            `;
+        }
+
+        async function sendKey(key) {
+            await api('/api/remote/key?key=' + key, { method: 'POST' });
+        }
+
+        async function sendText() {
+            const text = document.getElementById('text-input').value;
+            await api('/api/clipboard', { method: 'POST', body: new URLSearchParams({ text }) });
+            showToast('Sent to TV');
+        }
+
+        async function loadClipboard() {
+            const clipboard = await api('/api/clipboard') || {};
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>Send Text</h3>
+                    <textarea class="input" rows="4" id="clipboard-text" placeholder="Enter text..."></textarea>
+                    <button class="btn btn-primary" onclick="sendClipboard()">Send to TV</button>
+                </div>
+            `;
+        }
+
+        async function sendClipboard() {
+            const text = document.getElementById('clipboard-text').value;
+            await api('/api/clipboard', { method: 'POST', body: new URLSearchParams({ text }) });
+            showToast('Sent to TV');
+            document.getElementById('clipboard-text').value = '';
+        }
+
+        async function loadFiles() {
+            const files = await api('/api/files') || [];
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>Files</h3>
+                    ${files.length === 0 ? '<p>No files found</p>' : files.map(f => `
+                        <div class="file-item">
+                            <span>${f.isDirectory ? '📁' : '📄'}</span>
+                            <span class="name">${f.name}</span>
+                            <span class="size">${formatSize(f.size)}</span>
+                            ${!f.isDirectory ? `<button class="btn btn-secondary" onclick="playFile('${f.path}')">Play</button>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function formatSize(bytes) {
+            if (bytes >= 1073741824) return (bytes / 1073741824).toFixed(1) + ' GB';
+            if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + ' MB';
+            if (bytes >= 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return bytes + ' B';
+        }
+
+        async function playFile(path) {
+            await api('/api/play/url', { method: 'POST', body: new URLSearchParams({ url: 'file://' + path, name: path.split('/').pop() }) });
+            showToast('Playing file');
+        }
+
+        async function loadApps() {
+            const apps = await api('/api/apps') || [];
+            document.getElementById('content').innerHTML = `
+                <input type="text" class="input" placeholder="Search apps..." id="app-search">
+                <div class="grid">${apps.map(app => `
+                    <div class="channel-card" onclick="launchApp('${app.package}')">
+                        ${app.icon ? `<img src="data:image/png;base64,${app.icon}" alt="${app.name}">` : '<div style="height:80px;display:flex;align-items:center;justify-content:center;">📱</div>'}
+                        <h4>${app.name}</h4>
+                    </div>
+                `).join('')}</div>
+            `;
+            document.getElementById('app-search').addEventListener('input', (e) => {
+                const q = e.target.value.toLowerCase();
+                document.querySelectorAll('.channel-card').forEach(card => {
+                    card.style.display = card.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+                });
+            });
+        }
+
+        async function launchApp(packageName) {
+            await api('/api/apps/launch', { method: 'POST', body: new URLSearchParams({ package: packageName }) });
+            showToast('Launching app');
+        }
+
+        async function loadNotifications() {
+            const notifs = await api('/api/notifications') || [];
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>Notifications</h3>
+                    ${notifs.length === 0 ? '<p>No notifications</p>' : notifs.map(n => `
+                        <div class="file-item">
+                            <div>
+                                <strong>${n.title}</strong><br>
+                                <small>${n.text}</small>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        async function loadDevice() {
+            const device = await api('/api/device') || {};
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>Device Info</h3>
+                    <p><strong>Name:</strong> ${device.name}</p>
+                    <p><strong>IP:</strong> ${device.ip}</p>
+                    <p><strong>Version:</strong> ${device.appVersion}</p>
+                    <p><strong>Android:</strong> ${device.androidVersion}</p>
+                    <button class="btn btn-primary" onclick="copyIp()">Copy IP</button>
+                </div>
+                <div class="card">
+                    <h3>QR Code</h3>
+                    <div style="text-align:center;">
+                        <p>Scan to access from browser</p>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://${device.ip}:8080" alt="QR Code">
+                    </div>
+                </div>
+            `;
+        }
+
+        async function copyIp() {
+            const device = await api('/api/device') || {};
+            await navigator.clipboard.writeText('http://' + device.ip + ':8080');
+            showToast('IP copied');
+        }
+
+        async function loadVolume() {
+            const vol = await api('/api/volume') || { level: 0 };
+            document.getElementById('content').innerHTML = `
+                <div class="card">
+                    <h3>Volume</h3>
+                    <input type="range" class="volume-slider" min="0" max="15" value="${vol.level}" id="volume-slider" onchange="setVolume(this.value)">
+                    <p style="text-align:center;">Volume: <span id="vol-display">${vol.level}</span> / 15</p>
+                </div>
+                <div class="card">
+                    <button class="btn btn-primary" onclick="wakeScreen()" style="width:100%;">Wake Screen</button>
+                </div>
+            `;
+        }
+
+        async function setVolume(level) {
+            await api('/api/volume', { method: 'POST', body: new URLSearchParams({ level }) });
+            document.getElementById('vol-display').textContent = level;
+        }
+
+        async function wakeScreen() {
+            await api('/api/screen/wake', { method: 'POST' });
+            showToast('Screen waking');
+        }
+
+        function setTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById('page-title').textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+            
+            switch (tab) {
+                case 'channels': loadChannels(); break;
+                case 'sources': loadSources(); break;
+                case 'remote': loadRemote(); break;
+                case 'clipboard': loadClipboard(); break;
+                case 'files': loadFiles(); break;
+                case 'apps': loadApps(); break;
+                case 'notifications': loadNotifications(); break;
+                case 'device': loadDevice(); break;
+                case 'volume': loadVolume(); break;
+            }
+        }
+
+        document.querySelectorAll('.nav-item').forEach(el => {
+            el.addEventListener('click', () => setTab(el.dataset.tab));
+        });
+
+        connectWs();
+        loadChannels();
+    </script>
+</body>
+</html>

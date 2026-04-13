@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="orange_500">#FFFF5722</color>
+    <color name="blue_500">#FF2196F3</color>
+    <color name="red_500">#FFF44336</color>
+
+    <!-- Theme colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="surface_light">#FFFAFAFA</color>
+    <color name="surface_dark">#FF121212</color>
+    <color name="on_surface_light">#FF1C1B1F</color>
+    <color name="on_surface_dark">#FFE6E1E5</color>
+    <color name="outline_light">#FF79747E</color>
+    <color name="outline_dark">#FF938F99</color>
+    <color name="error">#FFB3261E</color>
+    <color name="success">#FF4CAF50</color>
+    <color name="warning">#FFFF9800</color>
+
+    <!-- Accent presets -->
+    <color name="accent_purple">#FF6200EE</color>
+    <color name="accent_teal">#FF03DAC5</color>
+    <color name="accent_orange">#FFFF5722</color>
+    <color name="accent_blue">#FF2196F3</color>
+    <color name="accent_red">#FFF44336</color>
+</resources>
