@@ -47,9 +47,12 @@ class ApiHandler @Inject constructor(
             uri == "/api/volume" && method == "POST" -> handleSetVolume(params)
             uri.startsWith("/api/remote/key") -> handleRemoteKey(params)
             uri == "/" -> handleIndex()
-            uri.startsWith("/ws") -> handleWebSocket(uri, NanoHTTPD.IdealSocket())
-            else -> newFixedLengthResponse(Response.Status.NOT_FOUND, "application/json", """{"error": "Not found"}""")
+            else -> NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", """{"error": "Not found"}""")
         }
+    }
+
+    private fun methodNotAllowed(): NanoHTTPD.Response {
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.METHOD_NOT_ALLOWED, "application/json", """{"error": "Method not allowed"}""")
     }
 
     private fun handleStatus(method: String): NanoHTTPD.Response {
@@ -297,30 +300,22 @@ class ApiHandler @Inject constructor(
     }
 
     private fun handleIndex(): NanoHTTPD.Response {
-        return newFixedLengthResponse(
-            Response.Status.OK,
+        return NanoHTTPD.newFixedLengthResponse(
+            NanoHTTPD.Response.Status.OK,
             "text/html",
             "<html><body><h1>IPTVwala PlainApp</h1><p>Web UI not bundled</p></body></html>"
         )
     }
 
-    private fun handleWebSocket(uri: String, handshake: NanoHTTPD.IdealSocket): NanoHTTPD.Response {
-        return newFixedLengthResponse(Response.Status.SWITCHING_PROTOCOLS, "application/json", "")
-    }
-
     private fun jsonResponse(json: JSONObject): NanoHTTPD.Response {
-        return newFixedLengthResponse(Response.Status.OK, "application/json", json.toString())
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", json.toString())
     }
 
     private fun jsonResponse(json: JSONArray): NanoHTTPD.Response {
-        return newFixedLengthResponse(Response.Status.OK, "application/json", json.toString())
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", json.toString())
     }
 
     private fun badRequest(message: String): NanoHTTPD.Response {
-        return newFixedLengthResponse(Response.Status.BAD_REQUEST, "application/json", """{"error": "$message"}""")
-    }
-
-    private fun methodNotAllowed(): NanoHTTPD.Response {
-        return newFixedLengthResponse(Response.Status.METHOD_NOT_ALLOWED, "application/json", """{"error": "Method not allowed"}""")
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", """{"error": "$message"}""")
     }
 }

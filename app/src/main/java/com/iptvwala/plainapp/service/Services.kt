@@ -77,14 +77,12 @@ class MyAccessibilityService : AccessibilityService() {
     fun performDpadKey(keyCode: Int) {
         try {
             when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_UP -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_NAVIGATE_UP)
-                KeyEvent.KEYCODE_DPAD_DOWN -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_NAVIGATE_DOWN)
-                KeyEvent.KEYCODE_DPAD_LEFT -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_NAVIGATE_LEFT)
-                KeyEvent.KEYCODE_DPAD_RIGHT -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_NAVIGATE_RIGHT)
-                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_CLICK)
-                KeyEvent.KEYCODE_BACK -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_BACK)
-                KeyEvent.KEYCODE_HOME -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_HOME)
-                KeyEvent.KEYCODE_MENU -> performGlobalAction(android.content.accessibilityservice.AccessibilityServiceInfo.GLOBAL_ACTION_MENU)
+                KeyEvent.KEYCODE_BACK -> performGlobalAction(GLOBAL_ACTION_BACK)
+                KeyEvent.KEYCODE_HOME -> performGlobalAction(GLOBAL_ACTION_HOME)
+                KeyEvent.KEYCODE_MENU -> performGlobalAction(GLOBAL_ACTION_RECENTS) // Best approximation for MENU
+                else -> {
+                    keyEventInjector?.injectKeyEvent(keyCode)
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

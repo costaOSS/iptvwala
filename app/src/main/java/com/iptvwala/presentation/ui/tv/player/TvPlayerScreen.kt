@@ -3,6 +3,7 @@ package com.iptvwala.presentation.ui.tv.player
 import android.app.Activity
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -30,7 +31,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun TvPlayerScreen(
-    channel: Channel,
+    channel: Channel?,
     currentProgram: EpgProgram?,
     nextProgram: EpgProgram?,
     isPlaying: Boolean,
@@ -113,7 +114,7 @@ fun TvPlayerScreen(
 
 @Composable
 fun PlayerOverlay(
-    channel: Channel,
+    channel: Channel?,
     currentProgram: EpgProgram?,
     nextProgram: EpgProgram?,
     isPlaying: Boolean,
@@ -131,6 +132,7 @@ fun PlayerOverlay(
     onPreviousChannel: () -> Unit,
     onNextChannel: () -> Unit
 ) {
+    if (channel == null) return
     val timeFormat = remember { java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()) }
     
     Column(

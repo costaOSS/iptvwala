@@ -37,7 +37,7 @@ object AppModule {
             AppDatabase::class.java,
             "iptvwala.db"
         )
-            .setJournalMode(androidx.room.db.JournalMode.TRUNCATE)
+            .setJournalMode(androidx.room.RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }
     

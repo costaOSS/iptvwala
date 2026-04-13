@@ -1,7 +1,9 @@
 package com.iptvwala.server.service
 
 import android.app.ActivityManager
+import android.app.Notification
 import android.app.Service
+import fi.iki.elonen.NanoHTTPD
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -22,8 +24,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import com.iptvwala.server.handler.ApiHandler
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
 class PlainAppServerService : Service() {
     
+    @Inject
+    lateinit var apiHandler: ApiHandler
+    
+    @Inject
+    lateinit var serverState: ServerState
+    
+    private var server: PlainAppServer? = null
     private val binder = LocalBinder()
     
     inner class LocalBinder : Binder() {
@@ -37,6 +50,18 @@ class PlainAppServerService : Service() {
     override fun onCreate() {
         super.onCreate()
         startForeground(NOTIFICATION_ID, createNotification())
+        startServer()
+    }
+
+    private fun startServer() {
+        val port = 8080 // Could be from settings
+        server = PlainAppServer(port, apiHandler, serverState)
+        try {
+            server?.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false)
+            serverState.start(port)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
     
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -53,6 +78,8 @@ class PlainAppServerService : Service() {
     }
     
     override fun onDestroy() {
+        server?.stop()
+        serverState.stop()
         super.onDestroy()
     }
     
@@ -305,9 +332,9 @@ class ServerState @Inject constructor(
 }
 
 class WebSocketClient {
-    private var socket: fi.iki.elonen.websocket.WebSocket? = null
+    private var socket: fi.iki.elonen.NanoWSD.WebSocket? = null
     
-    fun setSocket(socket: fi.iki.elonen.websocket.WebSocket) {
+    fun setSocket(socket: fi.iki.elonen.NanoWSD.WebSocket) {
         this.socket = socket
     }
     
@@ -323,26 +350,10 @@ class WebSocketClient {
 class KeyEventInjector(private val context: Context) {
     
     fun injectKeyEvent(keyCode: Int) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val uiAutomation = context.getSystemService(Context.UI_AUTOMATION_SERVICE) as? android.app.UiAutomation
-                uiAutomation?.let {
-                    val event = android.view.KeyEvent(
-                        android.view.KeyEvent.ACTION_DOWN,
-                        keyCode
-                    )
-                    it.injectInputEvent(event, true)
-                    
-                    val upEvent = android.view.KeyEvent(
-                        android.view.KeyEvent.ACTION_UP,
-                        keyCode
-                    )
-                    it.injectInputEvent(upEvent, true)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        // Background key injection is only possible via AccessibilityService
+        // MyAccessibilityService.instance?.performDpadKey(keyCode)
+        android.util.Log.d("KeyEventInjector", "Injecting key: $keyCode")
+        com.iptvwala.plainapp.service.MyAccessibilityService.instance?.performDpadKey(keyCode)
     }
 }
 

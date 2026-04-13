@@ -10,7 +10,9 @@ import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.*
 import androidx.media3.common.util.UnstableApi
@@ -35,8 +37,11 @@ import javax.inject.Inject
 
 @UnstableApi
 @AndroidEntryPoint
-class PlayerService : MediaSessionService() {
+class PlayerService : MediaSessionService(), LifecycleOwner {
     
+    private val lifecycleRegistry = LifecycleRegistry(this)
+    override val lifecycle: Lifecycle = lifecycleRegistry
+
     @Inject
     lateinit var settingsRepository: SettingsRepository
     
@@ -57,6 +62,7 @@ class PlayerService : MediaSessionService() {
     
     override fun onCreate() {
         super.onCreate()
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         initializePlayer()
         initializeMediaSession()
         acquireWakeLock()
@@ -252,10 +258,11 @@ class PlayerService : MediaSessionService() {
     }
     
     override fun onDestroy() {
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         mediaSession?.run {
             player?.release()
             release()
-            player = null
+            this@PlayerService.player = null
         }
         wakeLock?.release()
         serviceScope.cancel()

@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.*
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -107,21 +108,25 @@ fun MainContent(
                     NavigationBarItem(
                         selected = currentRoute == Screen.Home.route,
                         onClick = { navController.navigate(Screen.Home.route) },
+                        icon = { Icon(painterResource(id = com.iptvwala.R.drawable.ic_home), "Home") },
                         label = { Text("Home") }
                     )
                     NavigationBarItem(
                         selected = currentRoute == Screen.Channels.route,
                         onClick = { navController.navigate(Screen.Channels.route) },
+                        icon = { Icon(painterResource(id = com.iptvwala.R.drawable.ic_channels), "Channels") },
                         label = { Text("Channels") }
                     )
                     NavigationBarItem(
                         selected = currentRoute == Screen.Favorites.route,
                         onClick = { navController.navigate(Screen.Favorites.route) },
+                        icon = { Icon(painterResource(id = com.iptvwala.R.drawable.ic_favorite), "Favorites") },
                         label = { Text("Favorites") }
                     )
                     NavigationBarItem(
                         selected = currentRoute == Screen.Settings.route,
                         onClick = { navController.navigate(Screen.Settings.route) },
+                        icon = { Icon(painterResource(id = com.iptvwala.R.drawable.ic_settings), "Settings") },
                         label = { Text("Settings") }
                     )
                 }

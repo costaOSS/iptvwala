@@ -2,29 +2,33 @@ package com.iptvwala.core.di
 
 import com.iptvwala.data.repository.*
 import com.iptvwala.domain.repository.*
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+object RepositoryModule {
     
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindChannelRepository(impl: ChannelRepositoryImpl): ChannelRepository
+    fun provideChannelRepository(impl: ChannelRepositoryImpl): ChannelRepository = impl
     
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindSourceRepository(impl: SourceRepositoryImpl): SourceRepository
+    fun provideSourceRepository(impl: SourceRepositoryImpl): SourceRepository = impl
     
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindEpgRepository(impl: EpgRepositoryImpl): EpgRepository
+    fun provideEpgRepository(impl: EpgRepositoryImpl): EpgRepository = impl
     
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
+    fun provideSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository = impl
+    
+    @Provides
+    @Singleton
+    fun provideWatchHistoryRepository(impl: WatchHistoryRepositoryImpl): WatchHistoryRepository = impl
 }

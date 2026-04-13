@@ -72,7 +72,7 @@ fun MobileSettingsScreen(
             item {
                 SettingsSection(title = "PlainApp Server") {
                     SettingsSwitch(
-                        icon = Icons.Default.Server,
+                        icon = Icons.Default.Settings,
                         title = "Server Enabled",
                         checked = uiState.serverEnabled,
                         onCheckedChange = { viewModel.setServerEnabled(it) }
@@ -115,7 +115,7 @@ fun MobileSettingsScreen(
                     
                     var bufferExpanded by remember { mutableStateOf(false) }
                     SettingsDropdown(
-                        icon = Icons.Default.BufferStorage,
+                        icon = Icons.Default.Dns,
                         title = "Buffer Size",
                         value = uiState.bufferSize,
                         expanded = bufferExpanded,
@@ -125,7 +125,7 @@ fun MobileSettingsScreen(
                     )
                     
                     SettingsSwitch(
-                        icon = Icons.Default.BackgroundPlayback,
+                        icon = Icons.Default.PlayCircleOutline,
                         title = "Background Playback",
                         checked = uiState.backgroundPlayback,
                         onCheckedChange = { viewModel.setBackgroundPlayback(it) }

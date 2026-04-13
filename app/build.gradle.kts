@@ -116,6 +116,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.nanohttpd)
+    implementation(libs.nanohttpd.websocket)
     implementation(libs.nanohttpd.nanolets)
 
     implementation(libs.zxing.core)

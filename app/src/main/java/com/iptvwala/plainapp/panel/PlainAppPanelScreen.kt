@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -785,8 +786,8 @@ private fun generateQrCode(content: String): android.graphics.Bitmap? {
     return try {
         val size = 512
         val bitmap = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
-        val barcodeEncoder = com.google.zxing.BarcodeEncoder()
-        barcodeEncoder.encodeBitmap(content, com.google.zxing.BarcodeFormat.QR_CODE, size, size, null)
+        val barcodeEncoder = com.journeyapps.barcodescanner.BarcodeEncoder()
+        barcodeEncoder.encodeBitmap(content, com.google.zxing.BarcodeFormat.QR_CODE, size, size)
     } catch (e: Exception) {
         null
     }

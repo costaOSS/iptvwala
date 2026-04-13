@@ -66,6 +66,7 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 coil-diskskeleton = { group = "io.coil-kt", name = "coil-diskskeleton", version.ref = "coil" }
 
 nanohttpd = { group = "org.nanohttpd", name = "nanohttpd", version.ref = "nanohttpd" }
+nanohttpd-websocket = { group = "org.nanohttpd", name = "nanohttpd-websocket", version.ref = "nanohttpd" }
 nanohttpd-nanolets = { group = "org.nanohttpd", name = "nanohttpd-nanolets", version.ref = "nanohttpd" }
 
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxingCore" }
