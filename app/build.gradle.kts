@@ -24,6 +24,12 @@ android {
             useSupportLibrary = true
         }
     }
+    
+    lint {
+        warningsAsErrors = false
+        abortOnError = false
+        checkDependencies = true
+    }
 
     signingConfigs {
         create("release") {

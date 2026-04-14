@@ -30,19 +30,30 @@ class DeviceUtils @Inject constructor(
     
     fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+            return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo
+            @Suppress("DEPRECATION")
+            return networkInfo?.isConnected == true
+        }
     }
     
     fun getDeviceIp(): String? {
         try {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val network = connectivityManager.activeNetwork ?: return null
-            val linkProperties = connectivityManager.getLinkProperties(network)
-            return linkProperties?.linkAddresses?.firstOrNull { 
-                !it.address.isLoopbackAddress && it.address is java.net.Inet4Address 
-            }?.address?.hostAddress
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val network = connectivityManager.activeNetwork ?: return null
+                val linkProperties = connectivityManager.getLinkProperties(network)
+                return linkProperties?.linkAddresses?.firstOrNull { 
+                    !it.address.isLoopbackAddress && it.address is java.net.Inet4Address 
+                }?.address?.hostAddress
+            } else {
+                return null
+            }
         } catch (e: Exception) {
             return null
         }
